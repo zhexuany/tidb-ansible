@@ -81,11 +81,11 @@ pd-store-heartbeat-tick-interval = "10000ms"
 # When the region's size exceeds region-max-size, we will split the region
 # into two which the left region's size will be region-split-size or a little
 # bit smaller.
-region-max-size = "80MB"
-region-split-size = "64MB"
+region-max-size = "8kB"
+region-split-size = "6.4KB"
 # When region size changes exceeds region-split-check-diff, we should check
 # whether the region should be split or not.
-region-split-check-diff = "8MB"
+region-split-check-diff = "2KB"
 
 # When a peer hasn't been active for max-peer-down-duration,
 # we will consider this peer to be down and report it to pd.
@@ -118,7 +118,7 @@ min-write-buffer-number-to-merge = 1
 
 # Maximum number of concurrent background compaction jobs, submitted to
 # the default LOW priority thread pool.
-max-background-compactions = 4
+max-background-compactions = 2
 
 # Control maximum total data size for base level (level 1).
 max-bytes-for-level-base = "64MB"
@@ -139,22 +139,24 @@ level0-stop-writes-trigger = 16
 #stats-dump-period-sec = 60
 
 [rocksdb.writecf]
-compression-per-level = "lz4:lz4:lz4:lz4:lz4:lz4:lz4"
-write-buffer-size = "64MB"
+compression-per-level = "no:no:no:lz4:lz4:lz4:lz4"
+block-size = "16KB"
+write-buffer-size = "16MB"
+max-write-buffer-number = 3
+min-write-buffer-number-to-merge = 1
+max-bytes-for-level-base = "64MB"
+target-file-size-base = "16MB"
+block-cache-size = "32MB"
+
+[rocksdb.raftcf]
+compression-per-level = "no:no:no:lz4:lz4:lz4:lz4"
+block-size = "16KB"
+write-buffer-size = "16MB"
 max-write-buffer-number = 5
 min-write-buffer-number-to-merge = 1
 max-bytes-for-level-base = "64MB"
 target-file-size-base = "16MB"
-block-cache-size = "2GB"
-
-[rocksdb.raftcf]
-compression-per-level = "lz4:lz4:lz4:lz4:lz4:lz4:lz4"
-write-buffer-size = "64MB"
-max-write-buffer-number = 5
-min-write-buffer-number-to-merge = 1
-max-bytes-for-level-base = "128MB"
-target-file-size-base = "16MB"
-block-cache-size = "2GB"
+block-cache-size = "32MB"
 
 # For detailed explanation please refer to https://github.com/facebook/rocksdb/blob/master/include/rocksdb/table.h
 [rocksdb.block-based-table]
@@ -177,12 +179,12 @@ block-based-bloom-filter = false
 [rocksdb.defaultcf]
 block-size = "64KB"
 compression-per-level = "lz4:lz4:lz4:lz4:lz4:lz4:lz4"
-write-buffer-size = "64MB"
-max-write-buffer-number = 5
+write-buffer-size = "16MB"
+max-write-buffer-number = 3
 min-write-buffer-number-to-merge = 1
 max-bytes-for-level-base = "64MB"
 target-file-size-base = "16MB"
-block-cache-size = "10GB"
+block-cache-size = "128MB"
 
 [storage]
 # notify capacity of scheduler's channel
@@ -191,7 +193,7 @@ scheduler-notify-capacity = 10240
 # maximum number of messages can be processed in one tick
 scheduler-messages-per-tick = 1024
 
-scheduler-concurrency = 10240
+scheduler-concurrency = 102400
 
 # scheduler's worker pool size
 scheduler-worker-pool-size = 4

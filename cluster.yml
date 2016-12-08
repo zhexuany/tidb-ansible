@@ -21,8 +21,6 @@
   gather_facts: false
   roles:
   - pushgateway
-  - prometheus
-  - grafana
 
 # deploying TiDB cluster
 
