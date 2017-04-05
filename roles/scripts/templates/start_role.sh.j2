@@ -16,6 +16,18 @@ if [ "$(id -u)" -eq 0 ]; then
     exit 1
 fi
 
+# test data disk is write/read all right
+test -f ${DEPLOY_DIR}/test_write_read_file && rm -rf ${DEPLOY_DIR}/test_write_read_file
+dd if=/dev/zero of=${DEPLOY_DIR}/test_write_read_file bs=8k count=10000 1>&/dev/null &&  \
+dd if=${DEPLOY_DIR}/test_write_read_file of=/dev/null bs=8k count=10000 1>&/dev/null
+if [ $? -ne 0 ];then
+    echo "warning: ${DEPLOY_DIR} can not write or read file!"
+    echo "error: exit now!"
+    exit 1
+else
+    rm -rf ${DEPLOY_DIR}/test_write_read_file
+fi
+
 # try up
 bin/svc -u "${STATUS_DIR}" &>/dev/null || true
 
