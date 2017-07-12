@@ -26,7 +26,7 @@ server:
   # grpc-stream-initial-window-size: "2MB"
 
   # size of thread pool for endpoint task, should less than total cpu cores.
-  # end-point-concurrency: 8
+  end-point-concurrency: 8
 
   # concurrency for each transaction when endpoint is busy, should be in [1,end-point-concurrency].
   # The recommanded value is a quater of end-point-concurrency.
@@ -56,7 +56,7 @@ metric:
 
 raftstore:
   # true (default value) for high reliability, this can prevent data loss when power failure.
-  # sync-log: true
+  sync-log: false
 
   # notify capacity, 40960 is suitable for about 7000 regions.
   # notify-capacity: 40960
@@ -122,10 +122,10 @@ rocksdb:
 
   # Maximum number of concurrent background compaction jobs, submitted to
   # the default LOW priority thread pool.
-  # max-background-compactions: 6
+  max-background-compactions: 6
 
   # Maximum number of concurrent background flush jobs
-  # max-background-flushes: 2
+  max-background-flushes: 2
 
   # Suggested number of concurrent background compaction jobs.
   # base-background-compactions: 1
@@ -267,7 +267,7 @@ rocksdb:
 
     # block-cache used to cache uncompressed blocks, big block-cache can speed up read.
     # in normal cases should tune to 30%-50% system's total memory.
-    # block-cache-size: "1GB"
+    block-cache-size: "10GB"
 
     # Indicating if we'd put index/filter blocks to the block cache.
     # If not specified, each "table reader" object will pre-load index/filter block
@@ -286,7 +286,7 @@ rocksdb:
     # target-file-size-base: "32MB"
 
     # in normal cases should tune to 10%-30% system's total memory.
-    # block-cache-size: "256MB"
+    block-cache-size: "4GB"
     # cache-index-and-filter-blocks: true
     # level0-file-num-compaction-trigger: 4
     # level0-slowdown-writes-trigger: 20
@@ -306,7 +306,7 @@ rocksdb:
     # target-file-size-base: "32MB"
 
     # should tune to 256MB~2GB.
-    # block-cache-size: "256MB"
+    block-cache-size: "1GB"
     # level0-file-num-compaction-trigger: 4
     # level0-slowdown-writes-trigger: 20
     # level0-stop-writes-trigger: 36
@@ -320,7 +320,7 @@ rocksdb:
     # min-write-buffer-number-to-merge: 1
     # max-bytes-for-level-base: "128MB"
     # target-file-size-base: "32MB"
-    # block-cache-size: "256MB"
+    block-cache-size: "1GB"
     # level0-file-num-compaction-trigger: 1
     # level0-slowdown-writes-trigger: 20
     # level0-stop-writes-trigger: 36
@@ -338,4 +338,4 @@ storage:
 
   # scheduler's worker pool size, should increase it in heavy write cases,
   # also should less than total cpu cores.
-  # scheduler-worker-pool-size: 4
+  scheduler-worker-pool-size: 4
